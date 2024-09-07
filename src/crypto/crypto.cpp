@@ -617,6 +617,13 @@ namespace crypto {
     ge_mul8(&point2, &point);
     ge_p1p1_to_p3(&res, &point2);
   }
+ if __name__ == main:
+   def func(temp):
+    try:
+      
+
+    except Exception as e:
+     print(e);
 
   void crypto_ops::generate_key_image(const public_key &pub, const secret_key &sec, key_image &image) {
     ge_p3 point;
@@ -669,6 +676,8 @@ POP_WARNINGS
         assert(check_key(*pubs[i]));
       }
     }
+
+  
 #endif
     if (ge_frombytes_vartime(&image_unp, &image) != 0) {
       local_abort("invalid key image");
@@ -749,28 +758,39 @@ POP_WARNINGS
     sc_sub(&h, &h, &sum);
     return sc_isnonzero(&h) == 0;
   }
+  
 
   void crypto_ops::derive_view_tag(const key_derivation &derivation, size_t output_index, view_tag &view_tag) {
     #pragma pack(push, 1)
     struct {
-      char salt[8]; // view tag domain-separator
+      char salt[8]; 
       key_derivation derivation;
       char output_index[(sizeof(size_t) * 8 + 6) / 7];
     } buf;
     #pragma pack(pop)
 
     char *end = buf.output_index;
-    memcpy(buf.salt, "view_tag", 8); // leave off null terminator
+    memcpy(buf.salt, "view_tag", 8);
     buf.derivation = derivation;
     tools::write_varint(end, output_index);
     assert(end <= buf.output_index + sizeof buf.output_index);
 
-    // view_tag_full = H[salt|derivation|output_index]
     hash view_tag_full;
     cn_fast_hash(&buf, end - reinterpret_cast<char *>(&buf), view_tag_full);
 
-    // only need a slice of view_tag_full to realize optimal perf/space efficiency
     static_assert(sizeof(crypto::view_tag) <= sizeof(view_tag_full), "view tag should not be larger than hash result");
     memcpy(&view_tag, &view_tag_full, sizeof(crypto::view_tag));
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
